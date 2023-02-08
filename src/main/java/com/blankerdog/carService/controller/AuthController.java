@@ -1,6 +1,7 @@
 package com.blankerdog.carService.controller;
 
 
+import com.blankerdog.carService.exception.GlobalExceptionHandler;
 import com.blankerdog.carService.model.Account;
 import com.blankerdog.carService.payload.request.LoginRequest;
 import com.blankerdog.carService.payload.request.SignupRequest;
@@ -10,6 +11,8 @@ import com.blankerdog.carService.security.jwt.JwtUtils;
 import com.blankerdog.carService.services.AccountService;
 import com.blankerdog.carService.services.RoleService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +39,8 @@ public class AuthController {
     PasswordEncoder passwordEncoder;
     @Autowired
     JwtUtils jwtUtils;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -73,6 +78,7 @@ public class AuthController {
                 roleService.readByName("USER"));
         accountService.create(account);
 
+        logger.info("Account registered successfully!");
         return ResponseEntity.ok(new MessageResponse("Account registered successfully!"));
     }
 

@@ -4,9 +4,12 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.apache.tomcat.websocket.AuthenticationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.util.UrlUtils;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,11 +18,11 @@ import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    //UPDATE
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    public ErrorInfo authenticationExceptionHandler(HttpServletRequest request, EntityNotFoundException exception){
+    public ErrorInfo authenticationExceptionHandler(HttpServletRequest request, AuthenticationException exception){
         return new ErrorInfo(401, "UNAUTHORIZED", exception.getMessage(), UrlUtils.buildFullRequestUrl(request));
     }
 
@@ -31,13 +34,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    public ErrorInfo accessDeniedExceptionHandler(HttpServletRequest request, EntityNotFoundException exception){
+    public ErrorInfo accessDeniedExceptionHandler(HttpServletRequest request, AccessDeniedException exception){
         return new ErrorInfo(403, "FORBIDDEN", exception.getMessage(), UrlUtils.buildFullRequestUrl(request));
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorInfo missingServletRequestParameterExceptionHandler(HttpServletRequest request, MissingServletRequestParameterException exception){
+        return new ErrorInfo(400, "BAD_REQUEST", exception.getMessage(), UrlUtils.buildFullRequestUrl(request));
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorInfo internalServerExceptionHandler(HttpServletRequest request, EntityNotFoundException exception){
+    public ErrorInfo internalServerExceptionHandler(HttpServletRequest request, Exception exception){
         return new ErrorInfo(500, "INTERNAL_SERVER_ERROR", exception.getMessage(), UrlUtils.buildFullRequestUrl(request));
     }
 
@@ -56,6 +65,7 @@ public class GlobalExceptionHandler {
             this.error = error;
             this.message = message;
             this.path = path;
+            logger.error("Exception raised = {} :: URL = {}", message, path);
         }
     }
 }

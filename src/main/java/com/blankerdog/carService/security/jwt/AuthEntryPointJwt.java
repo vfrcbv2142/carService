@@ -1,15 +1,21 @@
 package com.blankerdog.carService.security.jwt;
 
-import jakarta.servlet.ServletException;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.util.UrlUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
@@ -18,9 +24,22 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
+                         AuthenticationException authException) throws IOException {
         logger.error("Unauthorized error: {}", authException.getMessage());
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Error: Unauthorized");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("timestamp", (LocalDateTime.now().toString()));
+        jsonObject.put("status", "401");
+        jsonObject.put("error", "UNAUTHORIZED");
+        jsonObject.put("message", authException.getMessage());
+        jsonObject.put("path", UrlUtils.buildFullRequestUrl(request));
+
+        PrintWriter out = response.getWriter();
+        out.print(jsonObject);
+        out.flush();
     }
 
 }
