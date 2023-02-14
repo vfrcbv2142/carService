@@ -16,6 +16,7 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/accounts")
 public class AccountController {
@@ -39,14 +40,14 @@ public class AccountController {
         return new ResponseEntity<>(toModel(accountService.readById(id)), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping()
-    public ResponseEntity<EntityModel<Account>> postAccount(@RequestBody Account account){
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        return new ResponseEntity<>(toModel(accountService.create(account)), HttpStatus.CREATED);
-    }
+//    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PostMapping()
+//    public ResponseEntity<EntityModel<Account>> postAccount(@RequestBody Account account){
+//        account.setPassword(passwordEncoder.encode(account.getPassword()));
+//        return new ResponseEntity<>(toModel(accountService.create(account)), HttpStatus.CREATED);
+//    }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') and authentication.principal.id == #id")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<Account>> putById(@RequestBody Account account, @PathVariable long id){
         return new ResponseEntity<>(toModel(accountService.update(account, id)), HttpStatus.OK);

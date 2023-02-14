@@ -42,6 +42,7 @@ public class AccountServiceImpl implements AccountService {
     public Account update(Account account, long id) {
         Account existingAccount = readById(id);
         existingAccount.setPassword(passwordEncoder.encode(account.getPassword()));
+        existingAccount.setEmail(account.getEmail());
         return accountRepository.save(existingAccount);
     }
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -24,6 +25,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     public ErrorInfo authenticationExceptionHandler(HttpServletRequest request, AuthenticationException exception){
         return new ErrorInfo(401, "UNAUTHORIZED", exception.getMessage(), UrlUtils.buildFullRequestUrl(request));
+    }
+
+    @ExceptionHandler(TokenRefreshException.class)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ErrorInfo authenticationExceptionHandler(HttpServletRequest request, TokenRefreshException exception){
+        return new ErrorInfo(403, "FORBIDDEN", exception.getMessage(), UrlUtils.buildFullRequestUrl(request));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

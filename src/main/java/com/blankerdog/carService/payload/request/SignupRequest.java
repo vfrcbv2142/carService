@@ -1,5 +1,7 @@
 package com.blankerdog.carService.payload.request;
 
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -12,7 +14,11 @@ public class SignupRequest {
   private String login;
 
   @NotBlank
-      @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,40}",
+  @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,40}",
             message = "Must be minimum 6 characters, at least one letter and one number")
   private String password;
+
+  @Email
+  @Column(nullable = false, unique = true, name="email")
+  private String email;
 }

@@ -2,6 +2,7 @@ package com.blankerdog.carService.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,13 @@ public class Account implements UserDetails {
 
     @Column(nullable = false, name = "password")
     private String password;
+
+    @Email
+    @Column(nullable = false, unique = true, name="email")
+    private String email;
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
+    private RefreshToken refreshToken;
 
     @JsonIgnore
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
