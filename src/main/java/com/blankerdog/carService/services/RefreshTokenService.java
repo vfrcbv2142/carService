@@ -7,12 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface RefreshTokenService {
-    public Optional<RefreshToken> findByToken(String token);
+    Optional<RefreshToken> findByToken(String token);
 
-    public RefreshToken createRefreshToken(Long accountId);
+    RefreshToken findById(long id);
 
-    public RefreshToken verifyExpiration(RefreshToken token);
+    RefreshToken createRefreshToken(long accountId);
 
-    @Transactional
-    public int deleteByAccountId(Long id);
+    RefreshToken verifyExpiration(RefreshToken token);
+
+    void delete(long id);
 }

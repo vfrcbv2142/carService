@@ -35,7 +35,7 @@ public class Account implements UserDetails {
     @Column(nullable = false, unique = true, name="email")
     private String email;
 
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "account")
     private RefreshToken refreshToken;
 
     @JsonIgnore
