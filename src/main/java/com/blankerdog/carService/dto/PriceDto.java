@@ -8,7 +8,7 @@ import org.springframework.hateoas.server.core.Relation;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Relation(itemRelation = "Price", collectionRelation = "Prices")
+@Relation(itemRelation = "price", collectionRelation = "prices")
 public class PriceDto {
     private Long id;
 

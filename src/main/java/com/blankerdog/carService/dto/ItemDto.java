@@ -12,7 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Relation(itemRelation = "Item", collectionRelation = "Items")
+@Relation(itemRelation = "item", collectionRelation = "items")
 public class ItemDto {
     private Long id;
 

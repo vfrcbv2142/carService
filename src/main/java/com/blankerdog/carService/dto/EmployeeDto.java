@@ -1,8 +1,5 @@
 package com.blankerdog.carService.dto;
 
-import com.blankerdog.carService.model.Account;
-import com.blankerdog.carService.model.Order;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Relation(itemRelation = "Employee", collectionRelation = "Employees")
+@Relation(itemRelation = "employee", collectionRelation = "employees")
 public class EmployeeDto {
     private Long id;
 

@@ -41,7 +41,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account update(Account account, long id) {
         Account existingAccount = readById(id);
-        existingAccount.setPassword(passwordEncoder.encode(account.getPassword()));
+//        existingAccount.setPassword(passwordEncoder.encode(account.getPassword())); UPDATE METHOD UPDATE!!!!!!!!!!!!!!!!!
         existingAccount.setEmail(account.getEmail());
         return accountRepository.save(existingAccount);
     }

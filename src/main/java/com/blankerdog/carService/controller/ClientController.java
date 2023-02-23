@@ -7,8 +7,6 @@ import com.blankerdog.carService.model.Client;
 import com.blankerdog.carService.services.AccountService;
 import com.blankerdog.carService.services.ClientService;
 import com.blankerdog.carService.services.OrderService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -19,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -56,7 +55,7 @@ public class ClientController {
     public ResponseEntity<EntityModel<ClientDto>> postClient(@RequestBody ClientDto clientDto){
         Client client = ClientTransformer.convertToEntity(clientDto,
                 accountService.readById(clientDto.getAccountId()),
-                orderService.findAllByIds(clientDto.getOrdersIds()));
+                new ArrayList<>());
         return new ResponseEntity<>(toModel(ClientTransformer.convertToDto(clientService.create(client))), HttpStatus.CREATED);
     }
 
@@ -64,7 +63,7 @@ public class ClientController {
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<ClientDto>> putById(@RequestBody ClientDto clientDto, @PathVariable long id){
         Client client = ClientTransformer.convertToEntity(clientDto,
-                accountService.readById(clientDto.getAccountId()),
+                null,
                 orderService.findAllByIds(clientDto.getOrdersIds()));
         return new ResponseEntity<>(toModel(ClientTransformer.convertToDto(clientService.update(client, id))), HttpStatus.OK);
     }
@@ -73,7 +72,7 @@ public class ClientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id){
         clientService.delete(id);
-        return new ResponseEntity<String>("Client deleted successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Client deleted successfully", HttpStatus.OK);
     }
 
     private static EntityModel<ClientDto> toModel(ClientDto clientDto){

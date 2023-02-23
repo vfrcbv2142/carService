@@ -1,6 +1,6 @@
 package com.blankerdog.carService.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -24,14 +24,14 @@ public class Client {
     @Column(nullable = false, name="first_name")
     private String firstName;
 
-    @Column(nullable = false, name = "last_name")
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(nullable = false, name="phone_number")
+    @Column(name="phone_number")
     private String phoneNumber;
 
     @Email
-    @Column(name="email", unique = true)
+    @Column(name="email")
     private String email;
 
     @ManyToOne

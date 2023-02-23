@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -54,7 +55,7 @@ public class EmployeeController {
     public ResponseEntity<EntityModel<EmployeeDto>> postClient(@RequestBody EmployeeDto employeeDto){
         Employee employee = EmployeeTransformer.convertToEntity(employeeDto,
                 accountService.readById(employeeDto.getAccountId()),
-                orderService.findAllByIds(employeeDto.getOrdersIds()));
+                new ArrayList<>());
         return new ResponseEntity<>(toModel(EmployeeTransformer.convertToDto(employeeService.create(employee))), HttpStatus.CREATED);
     }
 
@@ -62,7 +63,7 @@ public class EmployeeController {
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<EmployeeDto>> putById(@RequestBody EmployeeDto employeeDto, @PathVariable long id){
         Employee employee = EmployeeTransformer.convertToEntity(employeeDto,
-                accountService.readById(employeeDto.getAccountId()),
+                null,
                 orderService.findAllByIds(employeeDto.getOrdersIds()));
         return new ResponseEntity<>(toModel(EmployeeTransformer.convertToDto(employeeService.update(employee, id))), HttpStatus.OK);
     }

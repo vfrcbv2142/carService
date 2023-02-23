@@ -10,7 +10,7 @@ import org.springframework.hateoas.server.core.Relation;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Relation(itemRelation = "Note", collectionRelation = "Notes")
+@Relation(itemRelation = "note", collectionRelation = "notes")
 public class NoteDto {
     private Long id;
 

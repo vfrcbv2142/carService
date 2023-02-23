@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Relation(itemRelation = "Order", collectionRelation = "Orders")
+@Relation(itemRelation = "order", collectionRelation = "orders")
 public class OrderDto {
     private Long id;
 
