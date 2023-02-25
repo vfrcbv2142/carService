@@ -44,7 +44,7 @@ public class PriceController {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') and @priceController.canAccessPrice(#id)")
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<PriceDto>> putPrice(@RequestBody PriceDto priceDto, @PathVariable long id){
-        Price price = PriceTransformer.convertToEntity(priceDto, accountService.readById(priceDto.getAccountId()));
+        Price price = PriceTransformer.convertToEntity(priceDto, null);
         return new ResponseEntity<>(toModel(PriceTransformer.convertToDto(priceService.update(price, id))), HttpStatus.OK);
     }
 
@@ -63,6 +63,6 @@ public class PriceController {
     public boolean canAccessPrice(long priceId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Account account =  (Account) authentication.getPrincipal();
-        return priceService.readById(account.getId()).getId().equals(priceId);
+        return priceService.getByAccountId(account.getId()).getId().equals(priceId);
     }
 }

@@ -33,7 +33,6 @@ public class OrderServiceImpl  implements OrderService {
         Order existingOrder = readById(id);
         existingOrder.setName(order.getName());
         existingOrder.setClient(order.getClient());
-        existingOrder.setAccount(order.getAccount());
         existingOrder.setItems(order.getItems());
         existingOrder.setEmployees(order.getEmployees());
         existingOrder.setItems(order.getItems());

@@ -7,6 +7,7 @@ import com.blankerdog.carService.model.Note;
 import com.blankerdog.carService.services.NoteService;
 import com.blankerdog.carService.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,16 @@ public class NoteController {
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<NoteDto>> getById(@PathVariable long id){
         return new ResponseEntity<>(toModel(NoteTransformer.convertToDto(noteService.readById(id))), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') and @orderController.canAccessOrder(#orderId)")
+    @GetMapping()
+    public ResponseEntity<CollectionModel<EntityModel<NoteDto>>> getAllByOrderId(@RequestParam long orderId){
+        List<EntityModel<NoteDto>> notesDto = noteService.findAllByOrderId(orderId).stream()
+                .map(x -> NoteTransformer.convertToDto(x))
+                .map(x -> toModel(x))
+                .toList();
+        return new ResponseEntity<>(CollectionModel.of(notesDto), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")

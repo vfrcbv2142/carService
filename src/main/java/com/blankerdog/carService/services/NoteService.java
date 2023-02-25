@@ -10,4 +10,6 @@ public interface NoteService {
     Note update(Note note, long id);
     void delete(long id);
     List<Note> getAll();
+
+    List<Note> findAllByOrderId(long orderId);
 }

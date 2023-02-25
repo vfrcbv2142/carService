@@ -45,4 +45,9 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> getAll() {
         return itemRepository.findAll();
     }
+
+    @Override
+    public List<Item> findAllByOrderId(long orderId){
+        return itemRepository.findAllByOrderId(orderId);
+    }
 }

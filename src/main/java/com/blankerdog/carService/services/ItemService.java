@@ -11,4 +11,6 @@ public interface ItemService {
     Item update(Item item, long id);
     void delete(long id);
     List<Item> getAll();
+
+    List<Item> findAllByOrderId(long orderId);
 }

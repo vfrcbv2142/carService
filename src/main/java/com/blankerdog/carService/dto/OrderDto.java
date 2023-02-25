@@ -26,14 +26,14 @@ public class OrderDto {
     private Long accountId;
 
     @NotNull
-    private ClientDto client;
+    private Long clientId;
 
     @NotNull
     private LocalDate creationDate;
 
-    private List<EmployeeDto> employees;
+    private List<Long> employeesIds;
 
-    private List<ItemDto> items;
+    private List<Long> itemsIds;
 
-    private List<Note> notes;
+    private List<Long> notesIds;
 }

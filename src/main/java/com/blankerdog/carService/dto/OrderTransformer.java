@@ -12,20 +12,22 @@ public class OrderTransformer {
                 order.getId(),
                 order.getName(),
                 order.getAccount().getId(),
-                ClientTransformer.convertToDto(order.getClient()),
+                order.getClient().getId(),
                 order.getCreationDate(),
                 order.getEmployees().stream()
-                        .map(x -> EmployeeTransformer.convertToDto(x))
+                        .map(x -> x.getId())
                         .collect(Collectors.toList()),
                 order.getItems().stream()
-                        .map(x -> ItemTransformer.convertToDto(x))
+                        .map(x -> x.getId())
                         .collect(Collectors.toList()),
-                order.getNotes()
+                order.getNotes().stream()
+                        .map(x -> x.getId())
+                        .collect(Collectors.toList())
         );
     }
 
     public static Order convertToEntity(OrderDto orderDto, Account account, Client client, List<Employee> employees,
-                                        List<Item> items){
+                                        List<Item> items, List<Note> notes){
         return new Order(orderDto.getId(),
                 orderDto.getName(),
                 account,
@@ -33,7 +35,7 @@ public class OrderTransformer {
                 orderDto.getCreationDate(),
                 employees,
                 items,
-                orderDto.getNotes()
+                notes
         );
     }
 }

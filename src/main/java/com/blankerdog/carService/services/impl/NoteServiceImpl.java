@@ -1,6 +1,7 @@
 package com.blankerdog.carService.services.impl;
 
 import com.blankerdog.carService.model.Note;
+import com.blankerdog.carService.model.Order;
 import com.blankerdog.carService.repository.NoteRepository;
 import com.blankerdog.carService.services.NoteService;
 import jakarta.persistence.EntityNotFoundException;
@@ -44,6 +45,11 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> getAll() {
         return noteRepository.findAll();
+    }
+
+    @Override
+    public List<Note> findAllByOrderId(long orderId){
+        return noteRepository.findAllByOrderId(orderId);
     }
 
 }

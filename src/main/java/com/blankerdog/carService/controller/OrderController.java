@@ -59,12 +59,15 @@ public class OrderController {
     public ResponseEntity<EntityModel<OrderDto>> postClient(@RequestBody OrderDto orderDto){
         Order order = OrderTransformer.convertToEntity(orderDto,
                 accountService.readById(orderDto.getAccountId()),
-                clientService.readById(orderDto.getClient().getId()),
-                orderDto.getEmployees().stream()
-                        .map(x -> employeeService.readById(x.getId()))
+                clientService.readById(orderDto.getClientId()),
+                orderDto.getEmployeesIds().stream()
+                        .map(x -> employeeService.readById(x))
                         .collect(Collectors.toList()),
-                orderDto.getItems().stream()
-                        .map(x -> itemService.readById(x.getId()))
+                orderDto.getItemsIds().stream()
+                        .map(x -> itemService.readById(x))
+                        .collect(Collectors.toList()),
+                orderDto.getNotesIds().stream()
+                        .map(x -> noteService.readById(x))
                         .collect(Collectors.toList())
                 );
         return new ResponseEntity<>(toModel(OrderTransformer.convertToDto(orderService.create(order))), HttpStatus.CREATED);
@@ -74,15 +77,18 @@ public class OrderController {
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<OrderDto>> putById(@RequestBody OrderDto orderDto, @PathVariable long id){
         Order order = OrderTransformer.convertToEntity(orderDto,
-                accountService.readById(orderDto.getAccountId()),
-                clientService.readById(orderDto.getClient().getId()),
-                orderDto.getEmployees().stream()
-                        .map(x -> employeeService.readById(x.getId()))
+                null,
+                clientService.readById(orderDto.getClientId()),
+                orderDto.getEmployeesIds().stream()
+                        .map(x -> employeeService.readById(x))
                         .collect(Collectors.toList()),
-                orderDto.getItems().stream()
-                        .map(x -> itemService.readById(x.getId()))
+                orderDto.getItemsIds().stream()
+                        .map(x -> itemService.readById(x))
+                        .collect(Collectors.toList()),
+                orderDto.getNotesIds().stream()
+                        .map(x -> noteService.readById(x))
                         .collect(Collectors.toList())
-        );
+                );
         return new ResponseEntity<>(toModel(OrderTransformer.convertToDto(orderService.update(order, id))), HttpStatus.OK);
     }
 

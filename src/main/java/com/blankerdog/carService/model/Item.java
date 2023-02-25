@@ -29,9 +29,16 @@ public class Item {
     @JoinColumn(name="order_id")
     private Order order;
 
+
+
+    // пофіксити, що в базі данних workType це число, а не строка
+    // !!!!!!!!!
+    // @Enumerated(EnumType.STRING)
+    // !!!!!!!
     @NotNull
     @ElementCollection
     @MapKeyColumn(name="work_type")
+    @MapKeyEnumerated(EnumType.STRING)
     @Column(name="price")
     @CollectionTable(name="item_prices", joinColumns=@JoinColumn(name="item_id"))
     private Map<WorkType, Integer> itemPrice;
