@@ -1,5 +1,6 @@
 package com.blankerdog.carService.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -36,10 +37,12 @@ public class Employee {
     @Column(name="position")
     private String position;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "orders_executors",
             joinColumns = @JoinColumn(name = "employee_id"),

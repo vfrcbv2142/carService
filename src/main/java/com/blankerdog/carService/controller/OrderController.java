@@ -38,20 +38,20 @@ public class OrderController {
     @Autowired
     NoteService noteService;
 
+
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') and authentication.principal.id == #accountId")
     @GetMapping()
-    public ResponseEntity<CollectionModel<EntityModel<OrderDto>>> getAllByAccountId(@RequestParam long accountId){
-        List<EntityModel<OrderDto>> ordersDto = orderService.findAllByAccountId(accountId).stream()
-                .map(x -> OrderTransformer.convertToDto(x))
-                .map(x -> toModel(x))
+    public ResponseEntity<CollectionModel<EntityModel<Order>>> getAllByAccountId(@RequestParam long accountId){
+        List<EntityModel<Order>> orders = orderService.findAllByAccountId(accountId).stream()
+                .map(x -> orderToModel(x))
                 .toList();
-        return new ResponseEntity<>(CollectionModel.of(ordersDto), HttpStatus.OK);
+        return new ResponseEntity<>(CollectionModel.of(orders), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') and @orderController.canAccessOrder(#id)")
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<OrderDto>> getById(@PathVariable long id){
-        return new ResponseEntity<>(toModel(OrderTransformer.convertToDto(orderService.readById(id))), HttpStatus.OK);
+    public ResponseEntity<EntityModel<Order>> getById(@PathVariable long id){
+        return new ResponseEntity<>(orderToModel(orderService.readById(id)), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -70,7 +70,7 @@ public class OrderController {
                         .map(x -> noteService.readById(x))
                         .collect(Collectors.toList())
                 );
-        return new ResponseEntity<>(toModel(OrderTransformer.convertToDto(orderService.create(order))), HttpStatus.CREATED);
+        return new ResponseEntity<>(orderDtoToModel(OrderTransformer.convertToDto(orderService.create(order))), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') and @orderController.canAccessOrder(#id)")
@@ -89,7 +89,7 @@ public class OrderController {
                         .map(x -> noteService.readById(x))
                         .collect(Collectors.toList())
                 );
-        return new ResponseEntity<>(toModel(OrderTransformer.convertToDto(orderService.update(order, id))), HttpStatus.OK);
+        return new ResponseEntity<>(orderDtoToModel(OrderTransformer.convertToDto(orderService.update(order, id))), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') and @orderController.canAccessOrder(#id)")
@@ -99,10 +99,16 @@ public class OrderController {
         return new ResponseEntity<String>("Order deleted successfully", HttpStatus.OK);
     }
 
-    private static EntityModel<OrderDto> toModel(OrderDto orderDto){
+    private static EntityModel<OrderDto> orderDtoToModel(OrderDto orderDto){
         return EntityModel.of(orderDto,
                 linkTo(methodOn(OrderController.class).getById(orderDto.getId())).withSelfRel(),
                 linkTo(methodOn(OrderController.class).getAllByAccountId(orderDto.getAccountId())).withRel("orders"));
+    }
+
+    private static EntityModel<Order> orderToModel(Order order){
+        return EntityModel.of(order,
+                linkTo(methodOn(OrderController.class).getById(order.getId())).withSelfRel(),
+                linkTo(methodOn(OrderController.class).getAllByAccountId(order.getAccount().getId())).withRel("orders"));
     }
 
     public boolean canAccessOrder(long orderId){

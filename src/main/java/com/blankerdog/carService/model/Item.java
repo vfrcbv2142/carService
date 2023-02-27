@@ -1,6 +1,7 @@
 package com.blankerdog.carService.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,17 +25,12 @@ public class Item {
     @Column(nullable = false, name = "name")
     private String name;
 
+    @JsonIgnore
     @NotNull
     @ManyToOne
     @JoinColumn(name="order_id")
     private Order order;
 
-
-
-    // пофіксити, що в базі данних workType це число, а не строка
-    // !!!!!!!!!
-    // @Enumerated(EnumType.STRING)
-    // !!!!!!!
     @NotNull
     @ElementCollection
     @MapKeyColumn(name="work_type")

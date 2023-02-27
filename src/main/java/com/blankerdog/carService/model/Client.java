@@ -1,6 +1,7 @@
 package com.blankerdog.carService.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,10 +35,12 @@ public class Client {
     @Column(name="email")
     private String email;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Order> orders;
 
