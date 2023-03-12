@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -42,7 +43,7 @@ public class NoteController {
         List<EntityModel<NoteDto>> notesDto = noteService.findAllByOrderId(orderId).stream()
                 .map(x -> NoteTransformer.convertToDto(x))
                 .map(x -> toModel(x))
-                .toList();
+                .collect(Collectors.toList());
         return new ResponseEntity<>(CollectionModel.of(notesDto), HttpStatus.OK);
     }
 
@@ -83,10 +84,10 @@ public class NoteController {
         Account account =  (Account) authentication.getPrincipal();
 
         List<Long> notesId = orderService.findAllByIds(orderService.findAllByAccountId(account.getId()).stream()
-                        .map(x -> x.getId()).toList()).stream()
+                        .map(x -> x.getId()).collect(Collectors.toList())).stream()
                 .flatMap(y -> y.getNotes().stream()
                         .map(z -> z.getId())
-                ).toList();
+                ).collect(Collectors.toList());
         return notesId.stream().anyMatch(x -> x.equals(noteId));
     }
 

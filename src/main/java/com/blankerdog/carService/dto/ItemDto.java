@@ -23,5 +23,5 @@ public class ItemDto {
     private Long orderId;
 
     @NotNull
-    private Map<String, Integer> itemPrice;
+    private Map<String, Float> itemPrice;
 }

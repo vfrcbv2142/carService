@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -40,8 +40,9 @@ public class Order {
     private Client client;
 
     @NotNull
-    @Column(name = "creation_date", columnDefinition = "DATE")
-    private LocalDate creationDate;
+    @Column(name = "creation_date", columnDefinition = "DATETIME")
+    private LocalDateTime creationDate;
+
 
     @ManyToMany
     @JoinTable(name = "orders_executors",

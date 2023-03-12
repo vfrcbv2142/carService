@@ -1,7 +1,6 @@
 package com.blankerdog.carService.dto;
 
 
-import com.blankerdog.carService.model.Note;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.server.core.Relation;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
@@ -29,7 +28,7 @@ public class OrderDto {
     private Long clientId;
 
     @NotNull
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 
     private List<Long> employeesIds;
 

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -30,7 +31,7 @@ public class AccountController {
     public ResponseEntity<CollectionModel<EntityModel<Account>>> getAll(){
         List<EntityModel<Account>> accounts = accountService.getAll().stream()
                 .map(x -> toModel(x))
-                .toList();
+                .collect(Collectors.toList());
         return new ResponseEntity<>(CollectionModel.of(accounts), HttpStatus.OK);
     }
 

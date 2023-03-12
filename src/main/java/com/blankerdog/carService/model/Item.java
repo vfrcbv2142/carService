@@ -35,7 +35,7 @@ public class Item {
     @ElementCollection
     @MapKeyColumn(name="work_type")
     @MapKeyEnumerated(EnumType.STRING)
-    @Column(name="price")
-    @CollectionTable(name="item_prices", joinColumns=@JoinColumn(name="item_id"))
-    private Map<WorkType, Integer> itemPrice;
+    @Column(name="amount")
+    @CollectionTable(name="work_amount", joinColumns=@JoinColumn(name="item_id"))
+    private Map<WorkType, Float> itemPrice;
 }

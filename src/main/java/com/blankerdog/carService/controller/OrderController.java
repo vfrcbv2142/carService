@@ -44,7 +44,7 @@ public class OrderController {
     public ResponseEntity<CollectionModel<EntityModel<Order>>> getAllByAccountId(@RequestParam long accountId){
         List<EntityModel<Order>> orders = orderService.findAllByAccountId(accountId).stream()
                 .map(x -> orderToModel(x))
-                .toList();
+                .collect(Collectors.toList());
         return new ResponseEntity<>(CollectionModel.of(orders), HttpStatus.OK);
     }
 

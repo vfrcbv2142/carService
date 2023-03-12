@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -40,7 +41,7 @@ public class ClientController {
         List<EntityModel<ClientDto>> clientsDto = clientService.getClientsByAccountId(accountId).stream()
                 .map(x -> ClientTransformer.convertToDto(x))
                 .map(x -> toModel(x))
-                .toList();
+                .collect(Collectors.toList());
         return new ResponseEntity<>(CollectionModel.of(clientsDto), HttpStatus.OK);
     }
 
